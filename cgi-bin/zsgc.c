@@ -5,28 +5,9 @@
 typedef struct {
         char *name;
         char *age;
-        char *adress;
+        char *as;
 
 }news;
-
-
-int insert(sqlite3 *db, news new) {
-    char *err;
-    char sql[200];
-
-    sprintf(sql, "INSERT INTO news (name,age,address) VALUES ('%s','%s','%s')", new.name,new.age,new.adress);
-
-    if (0 != sqlite3_exec(db, sql, NULL, NULL, &err)) {
-        printf("\t%s\n", err);
-        exit(-1);
-    }
-
-    return 0;
-}
-
-
-
-
 
 int callback(void *para, int col_count, char **col_value, char **col_name) {
 
@@ -41,6 +22,44 @@ int callback(void *para, int col_count, char **col_value, char **col_name) {
     return 0;
 }
 
+int insert(sqlite3 *db, news new) {
+    char *err;
+    char sql[200];
+
+    sprintf(sql, "INSERT INTO news (name,age,address) VALUES ('%s','%s','%s')", new.name,new.age,new.adress);
+
+    if (0 != sqlite3_exec(db, sql, NULL, NULL, &err)) {
+        printf("\t%s\n", err);
+        exit(-1);f
+    }
+    return 0;
+}
+
+int del(sqlite3 *db,int del_id)
+{
+	char *err;
+        char sql[100];
+	sprintf(sql, "DELETE FROM news WHERE id='%d'",del_id);
+	if (0 != sqlite3_exec(db, sql, callback, NULL, &err)) {
+                printf("%s\n", err);
+                exit(-1);
+         }
+        return 0;
+}
+
+int change(sqlite3 *db,news new,int x)
+{
+	char *err;
+        char sql[100];
+        sprintf(sql, "UPDATE news SET name='%s',age='%s',address='%s' WHERE id='%d'",new.name,new.age,new.adress,x);
+        if (0 != sqlite3_exec(db, sql, callback, NULL, &err)) {
+                printf("%s\n", err);
+                exit(-1);
+         }
+
+
+return 0;
+}
 
 
 int show(sqlite3 *db)
@@ -56,49 +75,7 @@ int show(sqlite3 *db)
         	exit(-1);
    	 }
 	return 0;
-
 }
-
-
-
-
-
-int del(sqlite3 *db,int x)
-{
-	char *err;
-        char sql[100];
-	sprintf(sql, "DELETE FROM news WHERE id='%d'",x);
-	if (0 != sqlite3_exec(db, sql, callback, NULL, &err)) {
-                printf("%s\n", err);
-                exit(-1);
-         }
-        return 0;
-
-
-}
-
-
-
-int modify(sqlite3 *db,news new,int x)
-{
-	char *err;
-        char sql[100];
-        sprintf(sql, "UPDATE news SET name='%s',age='%s',adress='%s' WHERE id='%d'",new.name,new.age,new.adress,x);
-        if (0 != sqlite3_exec(db, sql, callback, NULL, &err)) {
-                printf("%s\n", err);
-                exit(-1);
-         }
-
-
-return 0;
-}
-
-
-
-
-
-
-
 
 int main()
 
@@ -141,10 +118,10 @@ int main()
 				};break;
 
 
-			case 2:show(db); 
+			case 2: 
 			       printf("\t\t输入要删除的目标\n");
-			       scanf("\t%d",&x);
-			       del(db,x);break;
+			       scanf("\t%d",int del_id);
+			       del(db,int del_id);break;
 
 			case 3:
 			       {
@@ -161,7 +138,7 @@ int main()
                                scanf("%s",n.age);
                                printf("\t\t输入目标所在位置\n");
                                scanf("%s",n.adress);
-			       modify(db,n,x);
+			       change(db,n,x);
 			       };break;
 			       
 			case 4:
