@@ -5,7 +5,7 @@
 typedef struct {
         char *name;
         char *age;
-        char *as;
+        char *address;
 
 }news;
 
@@ -26,20 +26,20 @@ int insert(sqlite3 *db, news new) {
     char *err;
     char sql[200];
 
-    sprintf(sql, "INSERT INTO news (name,age,address) VALUES ('%s','%s','%s')", new.name,new.age,new.adress);
+    sprintf(sql, "INSERT INTO news (name,age,address) VALUES ('%s','%s','%s')", new.name,new.age,new.address);
 
     if (0 != sqlite3_exec(db, sql, NULL, NULL, &err)) {
         printf("\t%s\n", err);
-        exit(-1);f
+        exit(-1);
     }
     return 0;
 }
 
-int del(sqlite3 *db,int del_id)
+int del(sqlite3 *db,int x)
 {
 	char *err;
         char sql[100];
-	sprintf(sql, "DELETE FROM news WHERE id='%d'",del_id);
+	sprintf(sql, "DELETE FROM news WHERE id='%d'",x);
 	if (0 != sqlite3_exec(db, sql, callback, NULL, &err)) {
                 printf("%s\n", err);
                 exit(-1);
@@ -51,7 +51,7 @@ int change(sqlite3 *db,news new,int x)
 {
 	char *err;
         char sql[100];
-        sprintf(sql, "UPDATE news SET name='%s',age='%s',address='%s' WHERE id='%d'",new.name,new.age,new.adress,x);
+        sprintf(sql, "UPDATE news SET name='%s',age='%s',address='%s' WHERE id='%d'",new.name,new.age,new.address,x);
         if (0 != sqlite3_exec(db, sql, callback, NULL, &err)) {
                 printf("%s\n", err);
                 exit(-1);
@@ -106,13 +106,13 @@ int main()
 				printf("\t\t输入目标姓名");
 				new.name=malloc(sizeof(char));
 				new.age=malloc(sizeof(char));
-				new.adress=malloc(sizeof(char));
+				new.address=malloc(sizeof(char));
 
 				scanf("%s",new.name);
 				printf("\t\t输入目标年龄");
 				scanf("%s",new.age);
 				printf("\t\t输入目标所在位置");
-				scanf("%s",new.adress);
+				scanf("%s",new.address);
 			//	printf("%s",new->title);
 				insert(db,new);
 				};break;
@@ -120,8 +120,8 @@ int main()
 
 			case 2: 
 			       printf("\t\t输入要删除的目标\n");
-			       scanf("\t%d",int del_id);
-			       del(db,int del_id);break;
+			       scanf("\t%d",&x);
+			       del(db,x);break;
 
 			case 3:
 			       {
@@ -132,12 +132,12 @@ int main()
                                printf("\t\t输入目标姓名\n");
                                n.name=malloc(sizeof(char));
                                n.age=malloc(sizeof(char));
-                               n.adress=malloc(sizeof(char));
+                               n.address=malloc(sizeof(char));
                                scanf("%s",n.name);
                                printf("\t\t输入目标年龄\n");
                                scanf("%s",n.age);
                                printf("\t\t输入目标所在位置\n");
-                               scanf("%s",n.adress);
+                               scanf("%s",n.address);
 			       change(db,n,x);
 			       };break;
 			       
