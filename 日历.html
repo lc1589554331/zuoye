@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Js日历</title>
+<style type="text/css">
+  body{
+    margin: 0px;
+    padding: 0px;
+  }
+ .evrday{
+        width:14%;     
+         float:left;
+
+         }
+  #calendar{
+      width:420px;
+      border: 1px black solid;
+      height: 366px;
+      margin:auto;
+      padding: 0;
+     overflow-y: hidden;
+  }
+  #nav-t{
+    width: 400px;
+    height: 100px;
+    border-bottom: 1px black solid;
+    margin: 0px;
+    padding: 0px;
+  }
+ button{
+     width:25%;
+     height:40px;
+     float:left;
+ }
+ div{
+     margin-top:10px;
+     margin-bottom:5px;
+     text-align:center;
+ }
+ 
+#month{
+width:50%;
+float:left;
+}
+/* .every{
+  border: 1px black solid;
+} */
+ 
+</style>
+</head>
+<body onLoad="showday()">
+ <div id="calendar">
+    <div id="nav-t">
+       <button onClick="shang()">上个月</button>
+         <div id="month"></div>
+       <button onClick="next()" id="nav">下个月</button>
+    </div>
+    <div>
+       <div class="evrday">日</div>
+       <div class="evrday">一</div>
+       <div class="evrday">二</div>
+       <div class="evrday">三</div>
+       <div class="evrday">四</div>
+       <div class="evrday">五</div>
+       <div class="evrday">六</div>
+    </div>
+    
+    <div id="day" style="color:black"></div>
+ </div>
+ <script>
+      var today=new Date();//获取当前时间
+      var year=today.getFullYear();//获取当前的年份
+      var month=today.getMonth()+1;//获取当前月
+      var day=today.getDate();//获取当前月
+      var allday=0;
+      function showmonth(){
+          var year_month=year+"年"+month+"月";
+          document.getElementById("month").innerHTML=year_month;//显示当前的年月日
+      }
+    
+      function count(){
+          if(month!=2)
+          {
+          if(month==4||month==6||month==9||month==11)//判断是否是相同天数的几个月，二月除外
+             allday=30;
+             else
+             allday=31;
+          }
+          else
+          {
+              if((year%4==0&&year%100!=0)||(year%400==0))//判断是否是闰年，进行相应的改变
+              allday=29;
+              else 
+              allday=28;}
+      }
+      //显示相应月份的天数
+      function showday(){  
+        {
+
+        showmonth();
+            count();
+             var c = 0;
+          console.log(month)
+          let fistsdate=new Date(year,month-2,1);
+          console.log(fistsdate)
+          let ddd = fistsdate.getDate();
+          console.log(ddd)
+          var aaa=new Date(year,1,0).getDate();
+          console.log(aaa)
+          //let xinqi=fistsdate.getDay();
+          //上个月的剩余日期显示
+          console.log(xinqi)
+           var fistdate=new Date(year,month-1,1);
+           var xinqo=fistdate.getDay();
+           console.log(xinqo)
+          let daterow=document.getElementById("day");
+          console.log(daterow)
+          for(var i=0;i<xinqi;i++)//循环输出天数
+          {
+         
+              let dayElement=document.createElement("div");
+              console.log(dayElement)
+                dayElement.className="evrday";
+             daterow.appendChild(dayElement);
+           
+             console.log(c)
+             console.log(aaa)
+             console.log(xinqo)
+          
+          }
+
+          //console.log(x)
+          // let dayday = new Date(month-1),getDate();
+          // console.log(dayday)
+          for(var j=aaa-xinqo+1;j<=aaa;j++)
+          { 
+
+              var dayElement=document.createElement("div");
+               dayElement.innerHTML=j;
+                dayElement.className="evrday";
+                // if(j==day)//当前日，标红
+                //  dayElement.style.color="red";
+               if(month==month)
+                dayElement.style.color="#b2b2b2";
+
+                daterow.appendChild(dayElement);
+
+          }
+
+        }
+
+
+        //本月的剩余日期显示
+         
+          console.log(xinqi)
+          var daterow=document.getElementById("day");
+          console.log(daterow)
+        
+          
+          for(var j=1;j<=allday;j++)
+          { 
+
+              var dayElement=document.createElement("div");
+               dayElement.innerHTML=j;
+               // dayElement.style.border="0px black solid";
+                dayElement.className="evrday";
+             
+
+               
+
+                if(j==day)//当前日，标红
+                 dayElement.style.color="red";
+            
+                daterow.appendChild(dayElement);
+
+          }
+         //下个月的日期显示
+          var afistdate=new Date(year,month,1);
+          //console.log(fistdate)
+          var xinqi=afistdate.getDay();
+          console.log(xinqi)
+          var y = 6-xinqi;
+          console.log(y);
+
+          var daterow=document.getElementById("day");
+          console.log(daterow)
+        
+          console.log(allday)
+          for(var j=1;j<=y+1+7;j++)
+          { 
+
+              var dayElement=document.createElement("div");
+               dayElement.innerHTML=j;
+                dayElement.className="evrday";
+                // if(j==day)//当前日，标红
+                //  dayElement.style.color="red";
+               if(month==month){
+                dayElement.style.color="#b2b2b2";
+                daterow.appendChild(dayElement);
+                //dayElement.style.border:focus="1px black solid";
+              }
+
+          }
+          
+          var day = document.getElementById("day");
+               var evrday = day.children;
+                console.log(evrday.length);
+                for(var z = 0; z < evrday.length; z++){
+            (function(z){
+                evrday[z].onclick = function(){
+                    //先设置所有li元素为 黑色, 清空class
+                  for(var m = 6; m < evrday.length-(y+1+7); m++){
+                       evrday[m].style.color = "black";
+
+                   }
+
+    
+                    this.style.background = "#e3ed33";
+            
+                }
+            })(z);
+        }
+
+      }
+
+       //点击下个月
+        function next(){
+           document.getElementById('day').innerHTML ="";
+          if(month<12)
+            {  month=month+1;
+            }
+              else
+               {  month=1;
+                 year=year+1; 
+             }
+               document.getElementsByClassName('evrday').innerHTML =showday();   
+        }
+
+        function shang(){
+           document.getElementById('day').innerHTML ="";
+          if(month>1)
+              {month=month-1;
+              }
+              else
+              {
+                 month=12;
+                 year=year-1; 
+             }
+                document.getElementsByClassName('evrday').innerHTML =showday();    
+        }
+
+      </script>
+
+</html>
